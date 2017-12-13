@@ -238,22 +238,24 @@ open class DKImagePickerController : UINavigationController {
     open private(set) var selectedAssets = [DKAsset]()
     
     static private var imagePickerControllerReferenceCount = 0
-    public convenience init() {
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
         let rootVC = UIViewController()
-        self.init(rootViewController: rootVC)
-        
+        self.viewControllers = [rootVC]
+
         self.preferredContentSize = CGSize(width: 680, height: 600)
-        
+
         rootVC.navigationItem.hidesBackButton = true
-        
+
         getImageManager().groupDataManager.assetGroupTypes = self.assetGroupTypes
         getImageManager().groupDataManager.assetFetchOptions = self.createAssetFetchOptions()
         getImageManager().groupDataManager.showsEmptyAlbums = self.showsEmptyAlbums
         getImageManager().autoDownloadWhenAssetIsInCloud = self.autoDownloadWhenAssetIsInCloud
-        
+
         DKImagePickerController.imagePickerControllerReferenceCount += 1
     }
-    
+
     deinit {
         NotificationCenter.default.removeObserver(self)
         
@@ -266,7 +268,7 @@ open class DKImagePickerController : UINavigationController {
     private var hasInitialized = false
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
         if !hasInitialized {
             hasInitialized = true
             
